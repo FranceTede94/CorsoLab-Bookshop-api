@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autori</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista degli Autori</h1>
+    <table id="autoriTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Cognome</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- I dati degli autori verranno inseriti qui -->
+        </tbody>
+    </table>
+
+    <script>document.addEventListener("DOMContentLoaded", function() {
+    fetch("http://localhost:8081/autori/all")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok " + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const tbody = document.querySelector("#autoriTable tbody");
+            data.forEach(autore => {
+                const tr = document.createElement("tr");
+
+                const tdId = document.createElement("td");
+                tdId.textContent = autore.id;
+                tr.appendChild(tdId);
+
+                const tdNome = document.createElement("td");
+                tdNome.textContent = autore.nome;
+                tr.appendChild(tdNome);
+
+                const tdCognome = document.createElement("td");
+                tdCognome.textContent = autore.cognome;
+                tr.appendChild(tdCognome);
+
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(error => {
+            console.error("There has been a problem with your fetch operation:", error);
+        });
+});</script>
+</body>
+</html>
